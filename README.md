@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RSS Server & LMS — Frontend (CSE5006 Assessment 1)
 
-## Getting Started
+Joshua Fielding — 22846849
 
-First, run the development server:
+Frontend-only interface for an RSS Server feeding into an LMS.
+Backend and live RSS processing arrive in Assessment 2; this stage uses
+the Module 4 blog dataset as a stand-in for feed content.
+
+## Demo
+
+[Video walkthrough](link) ·
+
+## Getting started
+
+Requires Node 24+.
+
+first use correct node version:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+nvm use
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+second install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx pnpm dev          # http://localhost:3000
+```
 
-## Learn More
+```bash
+npx pnpm build && npx pnpm start   # production build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Route           | Purpose                                            |
+| --------------- | -------------------------------------------------- |
+| `/`             | Landing page, project intro, links to all sections |
+| `/about`        | Project scope, student details, video walkthrough  |
+| `/feeds`        | Sample posts in a card layout                      |
+| `/feeds/[slug]` | Individual post view                               |
+| `/settings`     | Theme and layout preferences                       |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Features
 
-## Deploy on Vercel
+- Light/dark theme, persisted via cookie (no flash on first paint)
+- Responsive hamburger navigation with CSS transform animation
+- Breadcrumbs and dynamic post routing
+- Hide/show content sections
+- Keyboard-navigable, WCAG AA contrast
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project structure

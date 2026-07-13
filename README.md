@@ -53,3 +53,14 @@ npx pnpm build && npx pnpm start   # production build
 - Keyboard-navigable, WCAG AA contrast
 
 ## Project structure
+
+## Branch strategy
+
+| Branch                  | Scope                                                                              |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `feature/layout`        | Root layout, Header, Footer, Navbar (desktop), page shells, ThemeProvider wired in |
+| `feature/theme`         | Light/dark toggle, no-flash cookie, consistent token application across all pages  |
+| `feature/hamburger`     | Responsive hamburger menu, CSS transform animation, ARIA roles                     |
+| `feature/feeds`         | Sample post data, `FeedCard` component, Feeds list, dynamic `/feeds/[slug]`        |
+| `feature/interactivity` | Breadcrumbs, Settings page, hide/show blocks, localStorage for preferences         |
+| `feature/accessibility` | WCAG AA contrast audit, keyboard navigation, skip link, ARIA polish                |

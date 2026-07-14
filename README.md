@@ -30,6 +30,7 @@ pnpm build && pnpm start  # production build
 git switch -c feature/layout
 # ... work, commit ...
 pnpm check # lint, typecheck, format
+git add -A && git commit -m "feat: add layout"
 git push -u origin feature/layout
 # once happy with the feature, create a PR and merge with squash commit
 gh pr create --fill && gh pr merge --squash --delete-branch

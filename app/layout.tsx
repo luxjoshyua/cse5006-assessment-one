@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import SkipLink from "@/components/SkipLink"
-import { getTheme } from "@/lib/theme"
+import { getTheme } from "@/lib/theme.server"
 import "./globals.css"
 
 const geistSans = Geist({

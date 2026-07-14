@@ -6,6 +6,15 @@ Frontend-only interface for an RSS Server feeding into an LMS.
 Backend and live RSS processing arrive in Assessment 2; this stage uses
 the Module 4 blog dataset as a stand-in for feed content.
 
+## Correct branching
+
+git switch -c feat/feat-name e.g. feat/theme-persistence
+
+# ... work, commit
+
+git push -u origin feat/theme-persistence
+gh pr create --fill && gh pr merge --squash --delete-branch
+
 ## Demo
 
 [Video walkthrough](link) ·

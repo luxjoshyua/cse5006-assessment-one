@@ -1,4 +1,5 @@
 import Nav from "@/components/Nav"
+import ThemeToggle from "@/components/ThemeToggle"
 
 export interface Props {
   title?: string
@@ -12,6 +13,7 @@ export default function Header({ title = DEFAULT_TITLE }: Props) {
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
         <p className="text-sm font-semibold tracking-tight">{title}</p>
         <Nav />
+        <ThemeToggle />
       </div>
     </header>
   )

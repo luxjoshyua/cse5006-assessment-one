@@ -6,41 +6,53 @@ Frontend-only interface for an RSS Server feeding into an LMS.
 Backend and live RSS processing arrive in Assessment 2; this stage uses
 the Module 4 blog dataset as a stand-in for feed content.
 
-## Correct branching
-
-git switch -c feat/feat-name e.g. feat/theme-persistence
-
-# ... work, commit
-
-git push -u origin feat/theme-persistence
-gh pr create --fill && gh pr merge --squash --delete-branch
-
 ## Demo
 
-[Video walkthrough](link) ·
+[Video walkthrough](link)
 
 ## Getting started
 
-Requires Node 24+.
-
-first use correct node version:
+Requires Node 24 (see `.nvmrc`).
 
 ```bash
 nvm use
+corepack enable pnpm
+pnpm install
+pnpm dev                  # http://localhost:3000
+pnpm build && pnpm start  # production build
 ```
 
-second install dependencies:
+## Git workflow
+
+`main` is kept releasable. All work lands via feature branch and pull request.
 
 ```bash
-npx pnpm install
+git switch -c feature/layout
+# ... work, commit ...
+pnpm check # lint, typecheck, format
+git push -u origin feature/layout
+# once happy with the feature, create a PR and merge with squash commit
+gh pr create --fill && gh pr merge --squash --delete-branch
 ```
 
-```bash
-npx pnpm dev          # http://localhost:3000
-```
+## Quick scripts to handle repeating patterns
+
+Script to setup a new component
 
 ```bash
-npx pnpm build && npx pnpm start   # production build
+pnpm component MyComponent
+```
+
+Script to setup a new page
+
+```bash
+pnpm page my-page
+```
+
+## Linting & formatting
+
+```bash
+pnpm fix
 ```
 
 ## Pages
@@ -55,7 +67,9 @@ npx pnpm build && npx pnpm start   # production build
 
 ## Features
 
-- Light/dark theme, persisted via cookie (no flash on first paint)
+- Light/dark theme, persisted in a **cookie** so the server can render the
+  correct theme on first paint (no flash of incorrect theme)
+- Layout preferences persisted in **localStorage** (client-only state)
 - Responsive hamburger navigation with CSS transform animation
 - Breadcrumbs and dynamic post routing
 - Hide/show content sections
@@ -63,7 +77,24 @@ npx pnpm build && npx pnpm start   # production build
 
 ## Project structure
 
-## Branch strategy
+```
+
+app/
+layout.tsx # Root layout, theme hydration, Header/Footer
+page.tsx # Home
+about/
+feeds/
+page.tsx # Feed list
+[slug]/page.tsx # Post detail
+settings/
+components/ # Reusable UI (Header, Footer, Nav, FeedCard, ...)
+lib/ # Sample post data, theme + preference helpers
+
+```
+
+## Design decisions
+
+See [DECISIONS.md](./DECISIONS.md) for architecture reasoning and trade-offs.
 
 | Branch                  | Scope                                                                              |
 | ----------------------- | ---------------------------------------------------------------------------------- |

@@ -6,7 +6,7 @@ export interface Props {
   className?: string
 }
 
-export default function ThemeToggle({ className }: Props) {
+export default function ThemeToggle( { className }: Props ) {
   const { theme, toggleTheme } = useTheme()
   const isDark = theme === "dark"
 
@@ -15,7 +15,7 @@ export default function ThemeToggle({ className }: Props) {
       type="button"
       onClick={toggleTheme}
       aria-pressed={isDark}
-      className={`inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent hover:text-accent ${className ?? ""}`}
+      className={`inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent hover:text-accent ${ className ?? "" }`}
     >
       <span
         aria-hidden="true"

@@ -9,17 +9,17 @@ export interface Props {
   onNavigate?: () => void
 }
 
-export default function Nav({ className, onNavigate }: Props) {
+export default function Nav( { className, onNavigate }: Props ) {
   const pathname = usePathname()
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href)
+  const isActive = ( href: string ) =>
+    href === "/" ? pathname === "/" : pathname.startsWith( href )
 
   return (
     <nav aria-label="Primary">
       <ul className={className ?? "hidden gap-6 md:flex"}>
-        {NAV_LINKS.map(({ href, label }) => {
-          const active = isActive(href)
+        {NAV_LINKS.map( ( { href, label } ) => {
+          const active = isActive( href )
           return (
             <li key={href}>
               <Link
@@ -34,7 +34,7 @@ export default function Nav({ className, onNavigate }: Props) {
               </Link>
             </li>
           )
-        })}
+        } )}
       </ul>
     </nav>
   )

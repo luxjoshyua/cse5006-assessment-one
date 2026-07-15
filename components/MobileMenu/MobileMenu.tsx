@@ -10,36 +10,48 @@ export interface Props {
   id: string
 }
 
-export default function MobileMenu( { open, onClose, id }: Props ) {
-  const panelRef = useRef<HTMLDivElement>( null )
+export default function MobileMenu({ open, onClose, id }: Props) {
+  const panelRef = useRef<HTMLDivElement>(null)
+  const backdropRef = useRef<HTMLDivElement>(null)
 
-  // Close on Escape
-  useEffect( () => {
-    if ( !open ) return
-    const onKey = ( e: KeyboardEvent ) => {
-      if ( e.key === "Escape" ) onClose()
+  useEffect(() => {
+    panelRef.current?.setAttribute("data-ready", "true")
+    backdropRef.current?.setAttribute("data-ready", "true")
+  }, [])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
     }
-    document.addEventListener( "keydown", onKey )
-    return () => document.removeEventListener( "keydown", onKey )
-  }, [ open, onClose ] )
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [open, onClose])
+
+  useEffect(() => {
+    if (open) panelRef.current?.focus()
+  }, [open])
 
   return (
     <>
-      {/* Backdrop */}
       <div
+        ref={backdropRef}
         aria-hidden="true"
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-40 bg-black/40 data-[ready=true]:transition-opacity data-[ready=true]:duration-500 md:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
 
-      {/* Panel */}
       <div
         ref={panelRef}
         id={id}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        tabIndex={-1}
         inert={!open}
-        className={`fixed top-0 right-0 z-50 flex h-dvh w-72 max-w-[80vw] flex-col gap-6 border-l border-border bg-surface p-6 shadow-xl transition-transform duration-300 ease-out md:hidden ${
+        className={`fixed top-0 right-0 z-50 flex h-dvh w-72 max-w-[80vw] flex-col gap-6 border-l border-border bg-surface p-6 shadow-xl outline-none data-[ready=true]:transition-transform data-[ready=true]:duration-500 data-[ready=true]:ease-out md:hidden ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >

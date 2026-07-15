@@ -8,15 +8,15 @@ import SkipLink from "@/components/SkipLink"
 import { getTheme } from "@/lib/theme.server"
 import "./globals.css"
 
-const geistSans = Geist( {
+const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: [ "latin" ],
-} )
+  subsets: ["latin"],
+})
 
-const geistMono = Geist_Mono( {
+const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: [ "latin" ],
-} )
+  subsets: ["latin"],
+})
 
 export const metadata: Metadata = {
   title: "RSS Server & LMS — Frontend",
@@ -28,12 +28,12 @@ interface Props {
   children: ReactNode
 }
 
-export default async function RootLayout( { children }: Props ) {
+export default async function RootLayout({ children }: Props) {
   const theme = await getTheme()
 
   return (
     <html lang="en" data-theme={theme}>
-      <body className={`${ geistSans.variable } ${ geistMono.variable }`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider initialTheme={theme}>
           <SkipLink />
           <div className="flex min-h-dvh flex-col">

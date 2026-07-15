@@ -10,21 +10,21 @@ export interface Props {
   children: ReactNode
 }
 
-export default function ThemeProvider( { initialTheme, children }: Props ) {
-  const [ theme, setThemeState ] = useState<Theme>( initialTheme )
+export default function ThemeProvider({ initialTheme, children }: Props) {
+  const [theme, setThemeState] = useState<Theme>(initialTheme)
 
-  const setTheme = useCallback( ( next: Theme ) => {
-    setThemeState( next )
-    applyTheme( next )
-  }, [] )
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next)
+    applyTheme(next)
+  }, [])
 
   const value = useMemo<ThemeContextValue>(
-    () => ( {
+    () => ({
       theme,
       setTheme,
-      toggleTheme: () => setTheme( theme === "dark" ? "light" : "dark" ),
-    } ),
-    [ theme, setTheme ],
+      toggleTheme: () => setTheme(theme === "dark" ? "light" : "dark"),
+    }),
+    [theme, setTheme],
   )
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

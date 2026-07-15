@@ -4,5 +4,5 @@ import { THEME_COOKIE, type Theme } from "./theme"
 
 export async function getTheme(): Promise<Theme> {
   const store = await cookies()
-  return store.get( THEME_COOKIE )?.value === "dark" ? "dark" : "light"
+  return store.get(THEME_COOKIE)?.value === "dark" ? "dark" : "light"
 }

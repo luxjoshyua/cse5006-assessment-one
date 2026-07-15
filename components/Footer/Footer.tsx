@@ -3,10 +3,10 @@ export interface Props {
   studentId?: string
 }
 
-export default function Footer( {
+export default function Footer({
   studentName = "Joshua Fielding",
   studentId = "22846849",
-}: Props ) {
+}: Props) {
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto flex max-w-5xl flex-col gap-1 px-4 py-6 text-sm text-muted sm:flex-row sm:justify-between">

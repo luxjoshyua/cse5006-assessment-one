@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { Geist, Geist_Mono } from "next/font/google"
+import PreferencesProvider from "@/components/PreferencesProvider"
 import ThemeProvider from "@/components/ThemeProvider"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -35,17 +36,19 @@ export default async function RootLayout({ children }: Props) {
     <html lang="en" data-theme={theme}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider initialTheme={theme}>
-          <SkipLink />
-          <div className="flex min-h-dvh flex-col">
-            <Header />
-            <main
-              id="main"
-              className="mx-auto w-full max-w-5xl flex-1 px-4 py-8"
-            >
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <PreferencesProvider>
+            <SkipLink />
+            <div className="flex min-h-dvh flex-col">
+              <Header />
+              <main
+                id="main"
+                className="mx-auto w-full max-w-5xl flex-1 px-4 py-8"
+              >
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </PreferencesProvider>
         </ThemeProvider>
       </body>
     </html>

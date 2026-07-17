@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant compact (&:where([data-density="compact"] *));
 
 :root {
   --bg: #fbfaf7;

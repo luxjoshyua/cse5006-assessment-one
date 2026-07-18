@@ -2,7 +2,7 @@ import ThemeToggle from "@/components/ThemeToggle"
 import DensityToggle from "@/components/DensityToggle"
 
 export const metadata = {
-  title: "Settings — RSS Server & LMS",
+  title: "Settings",
 }
 
 export default function SettingsPage() {

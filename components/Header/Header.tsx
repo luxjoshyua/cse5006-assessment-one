@@ -1,10 +1,11 @@
 import HeaderNav from "@/components/HeaderNav"
+import { SITE_METADATA } from "@/config/constants"
 
 export interface Props {
   title?: string
 }
 
-const DEFAULT_TITLE = "CSE5006 — Assessment 1: RSS Server & LMS Frontend"
+const DEFAULT_TITLE = SITE_METADATA.ASSESSMENT_TITLE
 
 export default function Header({ title = DEFAULT_TITLE }: Props) {
   return (

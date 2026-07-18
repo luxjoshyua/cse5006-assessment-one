@@ -7,6 +7,7 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import SkipLink from "@/components/SkipLink"
 import { getTheme } from "@/lib/theme.server"
+import { SITE_METADATA } from "@/config/constants"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -20,9 +21,11 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "RSS Server & LMS — Frontend",
-  description:
-    "Frontend interface for an RSS Server feeding into a Learning Management System.",
+  title: {
+    template: `%s — ${SITE_METADATA.SITE_NAME}`,
+    default: SITE_METADATA.ASSESSMENT_TITLE,
+  },
+  description: SITE_METADATA.DESCRIPTION,
 }
 
 interface Props {

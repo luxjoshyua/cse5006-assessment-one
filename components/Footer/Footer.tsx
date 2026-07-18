@@ -1,11 +1,13 @@
+import { STUDENT, SITE_METADATA } from "@/config/constants"
+
 export interface Props {
   studentName?: string
   studentId?: string
 }
 
 export default function Footer({
-  studentName = "Joshua Fielding",
-  studentId = "22846849",
+  studentName = STUDENT.NAME,
+  studentId = STUDENT.ID,
 }: Props) {
   return (
     <footer className="border-t border-border bg-surface">
@@ -13,7 +15,10 @@ export default function Footer({
         <p>
           {studentName} — {studentId}
         </p>
-        <p>La Trobe University · CSE5006 · 2026</p>
+        <p>
+          {SITE_METADATA.UNIVERSITY} · {SITE_METADATA.SUBJECT} ·{" "}
+          {SITE_METADATA.YEAR}
+        </p>
       </div>
     </footer>
   )

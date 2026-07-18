@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const item = await feeds.getItem(slug)
-  return { title: item ? `${item.title} — Feeds` : "Post not found" }
+  return { title: item ? item.title : "Post not found" }
 }
 
 export default async function FeedItemPage({ params }: Props) {

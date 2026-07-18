@@ -2,7 +2,7 @@ import FeedCard from "@/components/FeedCard"
 import { feeds } from "@/lib/feeds"
 
 export const metadata = {
-  title: "Feeds — RSS Server & LMS",
+  title: "Feeds",
 }
 
 export default async function FeedsPage() {

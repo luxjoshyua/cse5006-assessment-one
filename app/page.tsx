@@ -1,14 +1,13 @@
 import Collapsible from "@/components/Collapsible"
+import { SITE_METADATA } from "@/config/constants"
 
 export default function Home() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-semibold tracking-tight">
-        RSS Server &amp; LMS
+        {SITE_METADATA.SITE_NAME}
       </h1>
-      <p className="max-w-2xl text-muted">
-        Frontend interface for sourcing, displaying and organising feed content.
-      </p>
+      <p className="max-w-2xl text-muted">{SITE_METADATA.DESCRIPTION}</p>
       <section aria-labelledby="about-project" className="flex flex-col gap-3">
         <h2
           id="about-project"

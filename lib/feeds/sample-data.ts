@@ -1,51 +1,92 @@
 import type { Feed } from "./types"
 
+const GFG = "https://media.geeksforgeeks.org/wp-content/uploads"
+
 const SAMPLE_FEED: Feed = {
-  id: "lms-updates",
-  title: "LMS Course Updates",
-  description:
-    "Announcements and articles syndicated into the learning management system.",
-  siteUrl: "https://example.edu/lms",
+  id: "cse5006-blogs",
+  title: "CSE5006 Blogs",
+  description: "Blog-style sample content used in place of live RSS feed data.",
+  siteUrl: "https://lms.latrobe.edu.au",
   items: [
     {
-      slug: "welcome-to-the-rss-server",
-      title: "Welcome to the RSS Server",
-      link: "https://example.edu/lms/welcome-to-the-rss-server",
+      slug: "getting-started-with-react-components",
+      title: "Getting Started with React Components",
+      link: "https://lms.latrobe.edu.au/blog/getting-started-with-react-components",
       summary:
-        "An introduction to how syndicated content flows into the LMS and what students can expect each week.",
+        "Components are the building blocks of any React application. This post covers how to define one, pass data with props, and compose them together.",
       content:
-        "The RSS Server collects updates from across the course and delivers them into one reading surface inside the LMS. This first post explains the reading experience: how items are listed, how to open a full article, and how the layout adapts on smaller screens. In later stages these sample posts are replaced by live feed data, but the interface stays the same.",
-      publishedAt: "2026-07-01T09:00:00.000Z",
-      author: "Course Team",
-      categories: ["Announcements"],
+        "A React component is a function that returns markup. Components accept input through props and return the elements that describe what should appear on screen. Breaking an interface into small, focused components makes each piece easier to reason about and reuse, and it means a change to one part of the page does not require touching the rest of it.",
+      publishedAt: "2026-07-02T09:00:00.000Z",
+      author: "Priya Anand",
+      categories: ["React"],
       enclosure: {
-        url: "https://picsum.photos/seed/welcome/800/450",
-        type: "image/jpeg",
+        url: `${GFG}/20211213172224/1.png`,
+        type: "image/png",
       },
     },
     {
-      slug: "reading-feeds-on-any-device",
-      title: "Reading Feeds on Any Device",
-      link: "https://example.edu/lms/reading-feeds-on-any-device",
+      slug: "understanding-state-and-props",
+      title: "Understanding State and Props",
+      link: "https://lms.latrobe.edu.au/blog/understanding-state-and-props",
       summary:
-        "The feed layout is built to be scanned quickly on a phone as easily as on a laptop.",
+        "Props pass data down, state holds data that changes. Knowing which to reach for is most of the battle when structuring a React app.",
       content:
-        "Feed items are presented as cards with a clear title, publication date, and short summary, so the list can be scanned at a glance. Opening an item reveals the full content on its own page, with a breadcrumb back to the list. The same structure holds once live RSS feeds are connected, because each card is driven by the same fields an RSS item provides.",
-      publishedAt: "2026-07-04T14:30:00.000Z",
-      author: "Course Team",
-      categories: ["Guides", "Usability"],
+        "Props are read-only values passed from a parent component to a child. State is data a component owns and can change over time, usually in response to user interaction. A common mistake is storing something in state that could be derived from props, which leads to two sources of truth that can drift apart.",
+      publishedAt: "2026-07-05T10:30:00.000Z",
+      author: "Daniel Osei",
+      categories: ["React", "Fundamentals"],
+      enclosure: {
+        url: `${GFG}/20211213172225/2.png`,
+        type: "image/png",
+      },
     },
     {
-      slug: "what-changes-in-assessment-two",
-      title: "What Changes in Assessment Two",
-      link: "https://example.edu/lms/what-changes-in-assessment-two",
+      slug: "dynamic-routing-in-next-js",
+      title: "Dynamic Routing in Next.js",
+      link: "https://lms.latrobe.edu.au/blog/dynamic-routing-in-next-js",
       summary:
-        "A preview of the backend work: a database, an API, and real RSS feeds replacing this sample content.",
+        "Dynamic segments let one file serve many pages. This post walks through building a detail page driven by a URL parameter.",
       content:
-        "This stage is frontend only. The next stage introduces a database and an API so the server can accept and store real RSS feeds, and a client page to consume them. Because the interface is already built against an RSS-shaped data model, connecting the live source is a matter of changing where the data comes from, not how it is displayed.",
-      publishedAt: "2026-07-08T08:15:00.000Z",
-      author: "Course Team",
-      categories: ["Announcements", "Roadmap"],
+        "In the App Router, a folder named with square brackets creates a dynamic segment. The value in the URL is passed to the page as a parameter, which the page uses to look up the matching record. One file therefore serves every item in a collection, and adding new content requires no new routes.",
+      publishedAt: "2026-07-09T14:15:00.000Z",
+      author: "Priya Anand",
+      categories: ["Next.js", "Routing"],
+      enclosure: {
+        url: `${GFG}/20211213172226/3.png`,
+        type: "image/png",
+      },
+    },
+    {
+      slug: "styling-with-css-custom-properties",
+      title: "Styling with CSS Custom Properties",
+      link: "https://lms.latrobe.edu.au/blog/styling-with-css-custom-properties",
+      summary:
+        "Custom properties make theming straightforward: define a value once, reference it everywhere, and swap the whole palette by changing one attribute.",
+      content:
+        "A CSS custom property is a variable declared on a selector and inherited by its descendants. Declaring a set of colour variables on the document root, then redeclaring them under a theme attribute, allows an entire interface to switch appearance without touching individual components.",
+      publishedAt: "2026-07-12T08:45:00.000Z",
+      author: "Marco Rossi",
+      categories: ["CSS", "Theming"],
+      enclosure: {
+        url: `${GFG}/20211213172227/4.png`,
+        type: "image/png",
+      },
+    },
+    {
+      slug: "an-introduction-to-rss",
+      title: "An Introduction to RSS",
+      link: "https://lms.latrobe.edu.au/blog/an-introduction-to-rss",
+      summary:
+        "RSS is a simple XML format for publishing updates. Understanding its structure explains why feed readers all look broadly similar.",
+      content:
+        "An RSS document describes a channel containing a series of items. Each item carries a title, a link, a description, a publication date, and optionally an author, categories, and an enclosure for attached media. Because the format is fixed, any reader can display any feed, which is what makes syndication work across unrelated publishers.",
+      publishedAt: "2026-07-15T11:00:00.000Z",
+      author: "Daniel Osei",
+      categories: ["RSS", "Web"],
+      enclosure: {
+        url: `${GFG}/20211213172229/5.png`,
+        type: "image/png",
+      },
     },
   ],
 }

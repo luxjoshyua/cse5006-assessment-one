@@ -95,8 +95,6 @@ lib/ # Sample post data, theme + preference helpers
 
 ## Design decisions
 
-See [DECISIONS.md](./DECISIONS.md) for architecture reasoning and trade-offs.
-
 | Branch                  | Scope                                                                              |
 | ----------------------- | ---------------------------------------------------------------------------------- |
 | `feature/layout`        | Root layout, Header, Footer, Navbar (desktop), page shells, ThemeProvider wired in |

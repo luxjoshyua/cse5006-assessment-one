@@ -8,7 +8,7 @@ the Module 4 blog dataset as a stand-in for feed content.
 
 ## Demo
 
-[Video walkthrough](link)
+[Video walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
 
 ## Getting started
 

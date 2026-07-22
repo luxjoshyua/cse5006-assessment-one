@@ -1,0 +1,97 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// An RSS channel — a single feed source.
+model Feed {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  siteUrl     String
+  feedUrl     String   @unique
+  items       Item[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("feeds")
+}
+
+/// An RSS item — a single post within a feed.
+model Item {
+  id          String      @id @default(cuid())
+  guid        String      @unique
+  slug        String      @unique
+  title       String
+  link        String
+  summary     String
+  content     String
+  publishedAt DateTime
+
+  feed        Feed        @relation(fields: [feedId], references: [id], onDelete: Cascade)
+  feedId      String
+
+  author      Author?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId    String?
+
+  categories  Category[]  @relation("ItemCategories")
+  enclosures  Enclosure[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([feedId, publishedAt])
+  @@map("items")
+}
+
+/// The author or poster of an item (RSS dc:creator).
+model Author {
+  id    String  @id @default(cuid())
+  name  String  @unique
+  email String?
+  items Item[]
+
+  @@map("authors")
+}
+
+/// An RSS category tag, shared across items.
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  items Item[] @relation("ItemCategories")
+
+  @@map("categories")
+}
+
+/// Media attached to an item (RSS enclosure).
+model Enclosure {
+  id       String @id @default(cuid())
+  url      String
+  mimeType String
+  length   Int?
+
+  item     Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId   String
+
+  @@map("enclosures")
+}
+
+/// One row per API request, backing /count and Assessment 3 metrics.
+model RequestLog {
+  id         String   @id @default(cuid())
+  path       String
+  method     String
+  statusCode Int
+  clientId   String
+  feedId     String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([feedId])
+  @@index([clientId])
+  @@map("requests")
+}

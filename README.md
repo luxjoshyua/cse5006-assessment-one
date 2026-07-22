@@ -10,6 +10,10 @@ the Module 4 blog dataset as a stand-in for feed content.
 
 [Video walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
 
+## Repository Link
+
+[GitHub](https://github.com/luxjoshyua/cse5006-assessment-one)
+
 ## Getting started
 
 Requires Node 24 (see `.nvmrc`).

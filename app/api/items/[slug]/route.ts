@@ -26,11 +26,12 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   try {
-    const item = await prisma.item.update({
+    await prisma.item.update({
       where: { slug },
       data: pickUpdatableFields(body),
     })
-    return ok(item)
+    const updated = await feeds.getItem(slug)
+    return ok(updated)
   } catch {
     return fail("Item not found", 404)
   }

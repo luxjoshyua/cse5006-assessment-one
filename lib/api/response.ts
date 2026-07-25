@@ -13,5 +13,3 @@ export function fail(error: string, status = 400) {
     { status },
   )
 }
-
-// cmrzetao40000kb8owe4ihe3r

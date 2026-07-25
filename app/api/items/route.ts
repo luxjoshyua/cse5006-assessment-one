@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   if (!parsed.ok) return fail(parsed.error, 422)
 
   try {
-    const item = await prisma.item.create({
+    await prisma.item.create({
       data: {
         guid: parsed.value.slug,
         slug: parsed.value.slug,
@@ -44,7 +44,8 @@ export async function POST(request: Request) {
         },
       },
     })
-    return ok(item, 201)
+    const created = await feeds.getItem(parsed.value.slug)
+    return ok(created, 201)
   } catch {
     return fail("Failed to create item", 500)
   }

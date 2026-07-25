@@ -1,10 +1,9 @@
-# RSS Server & LMS — Frontend (CSE5006 Assessment 1)
+# RSS Server & LMS (CSE5006)
 
 Joshua Fielding — 22846849
 
-Frontend-only interface for an RSS Server feeding into an LMS.
-Backend and live RSS processing arrive in Assessment 2; this stage uses
-the Module 4 blog dataset as a stand-in for feed content.
+RSS Server feeding into an LMS with PostgreSQL database and Prisma ORM.
+Provides a web interface for viewing and managing RSS feeds and items.
 
 ## Demo
 
@@ -14,17 +13,71 @@ the Module 4 blog dataset as a stand-in for feed content.
 
 [GitHub](https://github.com/luxjoshyua/cse5006-assessment-one)
 
+## Prerequisites
+
+- Node 24 (see `.nvmrc`)
+- Docker Desktop (for PostgreSQL database)
+- pnpm (enabled via corepack)
+
 ## Getting started
 
-Requires Node 24 (see `.nvmrc`).
+### 1. Install dependencies
 
 ```bash
 nvm use
 corepack enable pnpm
 pnpm install
-pnpm dev                  # http://localhost:3000
-pnpm build && pnpm start  # production build
 ```
+
+### 2. Set up environment variables
+
+```bash
+cp .env.example .env
+# Edit .env if you want to change database credentials
+```
+
+### 3. Start the database
+
+**Important:** Docker Desktop must be running first.
+
+```bash
+docker-compose up -d
+```
+
+Verify the database is running:
+
+```bash
+docker ps | grep rss-db
+```
+
+To stop the database:
+
+```bash
+docker-compose down
+```
+
+### 4. Run database migrations
+
+```bash
+pnpm prisma migrate deploy
+# Or for development with seed data:
+pnpm prisma migrate dev
+```
+
+### 5. Start the application
+
+```bash
+pnpm dev                  # Development: http://localhost:3000
+pnpm build && pnpm start  # Production build
+```
+
+## Troubleshooting
+
+**Prisma errors**: Make sure Docker is running and the database container is up (`docker-compose up -d`)
+
+**Port 5432 in use**: Another PostgreSQL instance may be running. Stop it or change the port in `docker-compose.yml` and `.env`
+
+**Database connection failed**: Check that `DATABASE_URL` in `.env` matches the credentials in `docker-compose.yml`
 
 ## Git workflow
 
@@ -60,6 +113,16 @@ pnpm page my-page
 pnpm fix
 ```
 
+## Database commands
+
+```bash
+pnpm prisma studio          # Open Prisma Studio GUI (http://localhost:5555)
+pnpm prisma migrate dev     # Create and apply migrations
+pnpm prisma migrate deploy  # Apply migrations (production)
+pnpm prisma generate        # Regenerate Prisma Client
+pnpm prisma db seed         # Run seed script
+```
+
 ## Pages
 
 | Route           | Purpose                                            |
@@ -72,6 +135,8 @@ pnpm fix
 
 ## Features
 
+- **PostgreSQL database** with Prisma ORM for data persistence
+- **Repository pattern** with swappable implementations (Prisma/sample data)
 - Light/dark theme, persisted in a **cookie** so the server can render the
   correct theme on first paint (no flash of incorrect theme)
 - Layout preferences persisted in **localStorage** (client-only state)
@@ -79,22 +144,33 @@ pnpm fix
 - Breadcrumbs and dynamic post routing
 - Hide/show content sections
 - Keyboard-navigable, WCAG AA contrast
+- Health check API endpoint at `/api/health`
 
 ## Project structure
 
 ```
-
 app/
-layout.tsx # Root layout, theme hydration, Header/Footer
-page.tsx # Home
-about/
-feeds/
-page.tsx # Feed list
-[slug]/page.tsx # Post detail
-settings/
-components/ # Reusable UI (Header, Footer, Nav, FeedCard, ...)
-lib/ # Sample post data, theme + preference helpers
-
+  layout.tsx           # Root layout, theme hydration, Header/Footer
+  page.tsx             # Home
+  about/
+  feeds/
+    page.tsx           # Feed list
+    [slug]/page.tsx    # Post detail
+  settings/
+  api/
+    health/route.ts    # Health check endpoint
+components/            # Reusable UI (Header, Footer, Nav, FeedCard, ...)
+lib/
+  prisma.ts            # Prisma client initialization
+  feeds/               # Feed repository implementations
+    prisma-repository.ts
+    sample-repository.ts
+  theme/               # Theme + preference helpers
+prisma/
+  schema.prisma        # Database schema
+  migrations/          # Database migrations
+  seed.ts              # Sample data seeder
+docker-compose.yml     # PostgreSQL database container
 ```
 
 ## Design decisions

@@ -2,9 +2,10 @@ import { prisma } from "@/lib/prisma"
 import { ok, fail } from "@/lib/api/response"
 import { feeds } from "@/lib/feeds"
 import { parseItemInput } from "@/lib/api/validation"
+import { withLogging } from "@/lib/api/with-logging"
 
 // GET /api/items — list all items
-export async function GET() {
+async function getHandler() {
   try {
     const items = await feeds.listItems()
     return ok(items)
@@ -14,7 +15,7 @@ export async function GET() {
 }
 
 // POST /api/items — create an item
-export async function POST(request: Request) {
+async function postHandler(request: Request) {
   let body: unknown
   try {
     body = await request.json()
@@ -50,3 +51,6 @@ export async function POST(request: Request) {
     return fail("Failed to create item", 500)
   }
 }
+
+export const GET = withLogging("/api/items", getHandler)
+export const POST = withLogging("/api/items", postHandler)

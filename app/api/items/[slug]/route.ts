@@ -2,20 +2,21 @@ import { prisma } from "@/lib/prisma"
 import { ok, fail } from "@/lib/api/response"
 import { feeds } from "@/lib/feeds"
 import { pickUpdatableFields } from "@/lib/api/validation"
+import { withLogging } from "@/lib/api/with-logging"
 
 interface Params {
   params: Promise<{ slug: string }>
 }
 
 // GET /api/items/:slug
-export async function GET(_req: Request, { params }: Params) {
+async function getHandler(_req: Request, { params }: Params) {
   const { slug } = await params
   const item = await feeds.getItem(slug)
   return item ? ok(item) : fail("Item not found", 404)
 }
 
 // PATCH /api/items/:slug
-export async function PATCH(request: Request, { params }: Params) {
+async function patchHandler(request: Request, { params }: Params) {
   const { slug } = await params
 
   let body: unknown
@@ -38,7 +39,7 @@ export async function PATCH(request: Request, { params }: Params) {
 }
 
 // DELETE /api/items/:slug
-export async function DELETE(_req: Request, { params }: Params) {
+async function deleteHandler(_req: Request, { params }: Params) {
   const { slug } = await params
   try {
     await prisma.item.delete({ where: { slug } })
@@ -47,3 +48,6 @@ export async function DELETE(_req: Request, { params }: Params) {
     return fail("Item not found", 404)
   }
 }
+export const GET = withLogging("/api/items/:slug", getHandler)
+export const PATCH = withLogging("/api/items/:slug", patchHandler)
+export const DELETE = withLogging("/api/items/:slug", deleteHandler)

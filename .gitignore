@@ -44,3 +44,4 @@ next-env.d.ts
 notes.md
 output/
 !.env.example
+lib/generated/

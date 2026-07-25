@@ -1,11 +1,7 @@
-import { sampleFeedRepository } from "./sample-repository"
+import { prismaFeedRepository } from "./prisma-repository"
 import type { FeedRepository } from "./repository"
 
-/**
- * The active feed source. In Assessment 2 this binding switches to the
- * RSS/database-backed repository; nothing else in the app changes.
- */
-export const feeds: FeedRepository = sampleFeedRepository
+export const feeds: FeedRepository = prismaFeedRepository
 
 export type { Feed, FeedItem, FeedEnclosure } from "./types"
 export type { FeedRepository } from "./repository"

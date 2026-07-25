@@ -15,7 +15,7 @@ export default function ThemeToggle({ className }: Props) {
       type="button"
       onClick={toggleTheme}
       aria-pressed={isDark}
-      className={`inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent hover:text-accent ${className ?? ""}`}
+      className={`hover:text-accen inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent ${className ?? ""}`}
     >
       <span
         aria-hidden="true"

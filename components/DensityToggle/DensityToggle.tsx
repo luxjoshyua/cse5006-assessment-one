@@ -59,7 +59,7 @@ export default function DensityToggle({ className }: Props) {
             aria-checked={active}
             tabIndex={active ? 0 : -1}
             onClick={() => setDensity(value)}
-            className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+            className={`cursor-pointer rounded-md px-3 py-1.5 text-sm transition-colors ${
               active ? "bg-accent text-accent-fg" : "text-muted hover:text-fg"
             }`}
           >

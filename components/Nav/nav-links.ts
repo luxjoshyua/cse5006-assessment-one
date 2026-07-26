@@ -8,4 +8,5 @@ export const NAV_LINKS: readonly NavLink[] = [
   { href: "/feeds", label: "Feeds" },
   { href: "/about", label: "About" },
   { href: "/settings", label: "Settings" },
+  { href: "/client", label: "Client" },
 ]

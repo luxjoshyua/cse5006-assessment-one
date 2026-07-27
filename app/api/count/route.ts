@@ -19,7 +19,10 @@ export async function GET() {
       totalRequests: total,
       uniqueClients: uniqueClients.length,
       byMethod: Object.fromEntries(
-        byMethod.map((r) => [r.method, r._count._all]),
+        byMethod.map((r: { method: string; _count: { _all: number } }) => [
+          r.method,
+          r._count._all,
+        ]),
       ),
     })
   } catch {

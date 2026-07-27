@@ -1,6 +1,8 @@
 import FeedCard from "@/components/FeedCard"
 import { feeds } from "@/lib/feeds"
 
+export const dynamic = "force-dynamic"
+
 export const metadata = {
   title: "Feeds",
 }

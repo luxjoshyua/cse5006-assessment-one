@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.env
+output
+lib/generated
+*.md
+.vscode
+.githooks

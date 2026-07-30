@@ -2,184 +2,167 @@
 
 Joshua Fielding — 22846849
 
-RSS Server feeding into an LMS with PostgreSQL database and Prisma ORM.
-Provides a web interface for viewing and managing RSS feeds and items.
+An RSS Server with a PostgreSQL database, a CRUD and operational API, and a
+client that consumes it. Runs entirely in Docker.
 
 ## Demo
 
-[Video walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
+[Assessment 2 walkthrough](https://youtu.be/vgWd3fq_bkI) · [Assessment 1 walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
 
-## Repository Link
+## Repository
 
-[GitHub](https://github.com/luxjoshyua/cse5006-assessment-one)
+[github.com/luxjoshyua/cse5006-rss-server](https://github.com/luxjoshyua/cse5006-rss-server)
 
-## Prerequisites
+## Quick start (Docker)
 
-- Node 24 (see `.nvmrc`)
-- Docker Desktop (for PostgreSQL database)
-- pnpm (enabled via corepack)
-
-## Getting started
-
-### 1. Install dependencies
+The whole stack — app and database — runs in Docker. Migrations are applied
+automatically on startup.
 
 ```bash
-nvm use
+cp .env.example .env      # adjust credentials if you like
+docker compose up --build
+```
+
+The app is then at http://localhost:3000.
+
+To seed sample feed data (first run only). Seeding runs from the host against
+the containerised database, so it needs local dependencies installed:
+
+```bash
+pnpm install
+pnpm prisma generate
+pnpm prisma db seed
+```
+
+To stop:
+
+```bash
+docker compose down       # keeps data
+docker compose down -v    # also removes the database volume
+```
+
+## Local development (app on host, database in Docker)
+
+Requires Node 24 (see `.nvmrc`).
+
+```bash
 corepack enable pnpm
 pnpm install
-```
-
-### 2. Set up environment variables
-
-```bash
 cp .env.example .env
-# Edit .env if you want to change database credentials
-```
 
-### 3. Start the database
-
-**Important:** Docker Desktop must be running first.
-
-```bash
-docker-compose up -d
-```
-
-Verify the database is running:
-
-```bash
-docker ps | grep rss-db
-```
-
-To stop the database:
-
-```bash
-docker-compose down
-```
-
-### 4. Run database migrations
-
-```bash
+docker compose up db -d   # database only
+pnpm prisma generate
 pnpm prisma migrate deploy
-# Or for development with seed data:
-pnpm prisma migrate dev
+pnpm prisma db seed
+
+pnpm dev                  # http://localhost:3000
 ```
 
-### 5. Start the application
+## API
 
-```bash
-pnpm dev                  # Development: http://localhost:3000
-pnpm build && pnpm start  # Production build
-```
+All endpoints return a consistent envelope: `{ "data": ..., "error": null }`
+on success, `{ "data": null, "error": "message" }` on failure.
 
-## Troubleshooting
+| Method | Route               | Purpose                                          |
+| ------ | ------------------- | ------------------------------------------------ |
+| GET    | `/api/health`       | Health check — verifies database connectivity    |
+| GET    | `/api/count`        | Request totals, unique clients, counts by method |
+| GET    | `/api/items`        | List all feed items, newest first                |
+| POST   | `/api/items`        | Create a feed item                               |
+| GET    | `/api/items/[slug]` | Retrieve a single item                           |
+| PATCH  | `/api/items/[slug]` | Update an item                                   |
+| DELETE | `/api/items/[slug]` | Delete an item                                   |
 
-**Prisma errors**: Make sure Docker is running and the database container is up (`docker-compose up -d`)
-
-**Port 5432 in use**: Another PostgreSQL instance may be running. Stop it or change the port in `docker-compose.yml` and `.env`
-
-**Database connection failed**: Check that `DATABASE_URL` in `.env` matches the credentials in `docker-compose.yml`
-
-## Git workflow
-
-`main` is kept releasable. All work lands via feature branch and pull request.
-
-```bash
-git switch -c feature/layout
-# ... work, commit ...
-pnpm check # lint, typecheck, format
-git add -A && git commit -m "feat: add layout"
-git push -u origin feature/layout
-# once happy with the feature, create a PR and merge with squash commit
-gh pr create --fill && gh pr merge --squash --delete-branch
-```
-
-## Quick scripts to handle repeating patterns
-
-Script to setup a new component
-
-```bash
-pnpm component MyComponent
-```
-
-Script to setup a new page
-
-```bash
-pnpm page my-page
-```
-
-## Linting & formatting
-
-```bash
-pnpm fix
-```
-
-## Database commands
-
-```bash
-pnpm prisma studio          # Open Prisma Studio GUI (http://localhost:5555)
-pnpm prisma migrate dev     # Create and apply migrations
-pnpm prisma migrate deploy  # Apply migrations (production)
-pnpm prisma generate        # Regenerate Prisma Client
-pnpm prisma db seed         # Run seed script
-```
+Clients may identify themselves with an `x-client-id` header; requests without
+one are attributed by IP. Every request to a logged route is recorded in the
+`requests` table, which backs `/api/count`.
 
 ## Pages
 
-| Route           | Purpose                                            |
-| --------------- | -------------------------------------------------- |
-| `/`             | Landing page, project intro, links to all sections |
-| `/about`        | Project scope, student details, video walkthrough  |
-| `/feeds`        | Sample posts in a card layout                      |
-| `/feeds/[slug]` | Individual post view                               |
-| `/settings`     | Theme and layout preferences                       |
+| Route           | Purpose                                                     |
+| --------------- | ----------------------------------------------------------- |
+| `/`             | Landing page and project introduction                       |
+| `/feeds`        | Feed items in a card layout, from the database              |
+| `/feeds/[slug]` | Individual item view with breadcrumb                        |
+| `/client`       | RSS Client — fetches from the API, shows live request stats |
+| `/about`        | Project scope, student details, video walkthrough           |
+| `/settings`     | Theme and feed density preferences                          |
 
-## Features
+## Database
 
-- **PostgreSQL database** with Prisma ORM for data persistence
-- **Repository pattern** with swappable implementations (Prisma/sample data)
-- Light/dark theme, persisted in a **cookie** so the server can render the
-  correct theme on first paint (no flash of incorrect theme)
-- Layout preferences persisted in **localStorage** (client-only state)
-- Responsive hamburger navigation with CSS transform animation
-- Breadcrumbs and dynamic post routing
-- Hide/show content sections
-- Keyboard-navigable, WCAG AA contrast
-- Health check API endpoint at `/api/health`
+PostgreSQL via Prisma. Six models:
+
+- **Feed** — an RSS channel
+- **Item** — a post within a feed (one-to-many)
+- **Author** — normalised, one author to many items
+- **Category** — many-to-many with items
+- **Enclosure** — media attached to an item
+- **RequestLog** — one row per API request, indexed for metrics
+
+Deleting a feed cascades to its items; deleting an author nulls the item's
+author rather than removing the post.
+
+```bash
+pnpm prisma studio          # GUI at http://localhost:5555
+pnpm prisma migrate dev     # create and apply a migration
+pnpm prisma migrate deploy  # apply migrations (production)
+pnpm prisma generate        # regenerate the client
+pnpm prisma db seed         # load sample data
+```
 
 ## Project structure
 
 ```
 app/
-  layout.tsx           # Root layout, theme hydration, Header/Footer
-  page.tsx             # Home
-  about/
-  feeds/
-    page.tsx           # Feed list
-    [slug]/page.tsx    # Post detail
-  settings/
+  layout.tsx             # Root layout, theme, providers
+  client/                # RSS Client page
+  feeds/                 # Feed list and [slug] detail
   api/
-    health/route.ts    # Health check endpoint
-components/            # Reusable UI (Header, Footer, Nav, FeedCard, ...)
+    health/route.ts      # Health check
+    count/route.ts       # Request statistics
+    items/route.ts       # List and create
+    items/[slug]/route.ts # Read, update, delete
+components/              # Reusable UI
+config/constants.ts      # Student and site metadata
 lib/
-  prisma.ts            # Prisma client initialization
-  feeds/               # Feed repository implementations
-    prisma-repository.ts
-    sample-repository.ts
-  theme/               # Theme + preference helpers
+  prisma.ts              # Prisma client singleton
+  api/                   # Response envelope, logging, client identification
+  feeds/                 # Repository interface and implementations
 prisma/
-  schema.prisma        # Database schema
-  migrations/          # Database migrations
-  seed.ts              # Sample data seeder
-docker-compose.yml     # PostgreSQL database container
+  schema.prisma          # Database schema
+  migrations/            # Applied migrations
+  seed.ts                # Sample data seeder
+Dockerfile               # Multi-stage build
+docker-entrypoint.sh     # Runs migrations, then starts the app
+docker-compose.yml       # App and database services
 ```
 
-## Design decisions
+## Architecture notes
 
-| Branch                  | Scope                                                                              |
-| ----------------------- | ---------------------------------------------------------------------------------- |
-| `feature/layout`        | Root layout, Header, Footer, Navbar (desktop), page shells, ThemeProvider wired in |
-| `feature/theme`         | Light/dark toggle, no-flash cookie, consistent token application across all pages  |
-| `feature/hamburger`     | Responsive hamburger menu, CSS transform animation, ARIA roles                     |
-| `feature/feeds`         | Sample post data, `FeedCard` component, Feeds list, dynamic `/feeds/[slug]`        |
-| `feature/interactivity` | Breadcrumbs, Settings page, hide/show blocks, localStorage for preferences         |
-| `feature/accessibility` | WCAG AA contrast audit, keyboard navigation, skip link, ARIA polish                |
+Feed data is read through a `FeedRepository` interface rather than imported
+directly. Assessment 1 used an in-memory sample implementation; Assessment 2
+swapped it for a Prisma-backed one by changing a single binding, with no
+changes to any page or component.
+
+## Git workflow
+
+`main` is frozen at the Assessment 1 submission (tag `a1-submission`).
+Assessment 2 work lands on `assessment-two` via feature branches and pull
+requests.
+
+```bash
+git switch -c feature/thing
+pnpm check                 # format, lint, typecheck
+git add -A && git commit -m "feat: thing"
+git push -u origin feature/thing
+gh pr create --base assessment-two --fill && gh pr merge --squash --delete-branch
+```
+
+## Scripts
+
+```bash
+pnpm component MyComponent  # scaffold a component
+pnpm page my-page           # scaffold a page
+pnpm fix                    # format and lint
+pnpm check                  # format check, lint, typecheck
+```

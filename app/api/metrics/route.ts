@@ -8,10 +8,13 @@ export async function GET() {
       uniqueClientRows,
       feedCount,
       itemCount,
+      errorCount,
       requestsByFeed,
       requestsByClient,
       requestsByStatus,
-      recentErrors,
+      emptyFeeds,
+      lastRequest,
+      allFeeds,
     ] = await Promise.all([
       prisma.requestLog.count(),
       prisma.requestLog.findMany({
@@ -20,6 +23,9 @@ export async function GET() {
       }),
       prisma.feed.count(),
       prisma.item.count(),
+      prisma.requestLog.count({
+        where: { statusCode: { gte: 400 } },
+      }),
       prisma.requestLog.groupBy({
         by: ["feedId"],
         _count: { _all: true },
@@ -35,8 +41,16 @@ export async function GET() {
         by: ["statusCode"],
         _count: { _all: true },
       }),
-      prisma.requestLog.count({
-        where: { statusCode: { gte: 400 } },
+      prisma.feed.findMany({
+        where: { items: { none: {} } },
+        select: { id: true, title: true },
+      }),
+      prisma.requestLog.findFirst({
+        orderBy: { createdAt: "desc" },
+        select: { createdAt: true },
+      }),
+      prisma.feed.findMany({
+        select: { id: true, title: true },
       }),
     ])
 
@@ -45,10 +59,18 @@ export async function GET() {
       uniqueClients: uniqueClientRows.length,
       feedCount,
       itemCount,
-      errorCount: recentErrors,
+      errorCount,
+      lastRequestAt: lastRequest?.createdAt.toISOString() ?? null,
+      emptyFeeds: emptyFeeds.map((f: { id: string; title: string }) => ({
+        id: f.id,
+        title: f.title,
+      })),
       requestsByFeed: requestsByFeed.map(
         (r: { feedId: string | null; _count: { _all: number } }) => ({
           feedId: r.feedId,
+          title:
+            allFeeds.find((f: { id: string }) => f.id === r.feedId)?.title ??
+            "Unknown feed",
           count: r._count._all,
         }),
       ),

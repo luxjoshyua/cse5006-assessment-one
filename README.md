@@ -28,6 +28,8 @@ The app is then at http://localhost:3000.
 To seed sample feed data (first run only). Seeding runs from the host against
 the containerised database, so it needs local dependencies installed:
 
+curl -s localhost:3000/api/feeds/cmrzetao40000kb8owe4ihe3r/items > /dev/null
+
 ```bash
 pnpm install
 pnpm prisma generate

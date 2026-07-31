@@ -37,24 +37,39 @@ export default function Dashboard({ className }: Props) {
     }
   }, [])
 
-  // useEffect(() => {
-  // const initial = setTimeout(() => void refresh(), 0)
-  // const id = setInterval(() => void refresh(), POLL_MS)
-  // return () => {
-  // clearTimeout(initial)
-  // clearInterval(id)
-  // }
-  // }, [refresh])
-
   useEffect(() => {
-    const instance = Math.random().toString(36).slice(2, 7)
-    console.log("dashboard polling started", instance)
+    let intervalId: ReturnType<typeof setInterval> | undefined
+
+    const start = () => {
+      if (intervalId !== undefined) return
+      intervalId = setInterval(() => void refresh(), POLL_MS)
+    }
+
+    const stop = () => {
+      if (intervalId === undefined) return
+      clearInterval(intervalId)
+      intervalId = undefined
+    }
+
+    // Only poll while the tab is visible: a hidden dashboard has no reason
+    // to keep querying, and background tabs would otherwise compound load.
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stop()
+      } else {
+        void refresh()
+        start()
+      }
+    }
+
     const initial = setTimeout(() => void refresh(), 0)
-    const id = setInterval(() => void refresh(), POLL_MS)
+    start()
+    document.addEventListener("visibilitychange", onVisibilityChange)
+
     return () => {
-      console.log("dashboard polling stopped", instance)
       clearTimeout(initial)
-      clearInterval(id)
+      stop()
+      document.removeEventListener("visibilitychange", onVisibilityChange)
     }
   }, [refresh])
 

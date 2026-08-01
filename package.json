@@ -14,7 +14,10 @@
     "check": "pnpm format:check && pnpm lint && pnpm typecheck",
     "fix": "pnpm format && pnpm lint:fix && pnpm check",
     "component": "node scripts/create-component.mjs",
-    "page": "node scripts/create-page.mjs"
+    "page": "node scripts/create-page.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.0",
@@ -27,6 +30,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

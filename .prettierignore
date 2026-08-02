@@ -6,3 +6,7 @@ out
 .venv
 pnpm-lock.yaml
 next-env.d.ts
+load-tests/reports
+load-tests/results
+playwright-report
+test-results

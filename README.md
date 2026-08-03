@@ -73,8 +73,8 @@ pnpm dev
 Run tests from the project root, not from inside `e2e/`:
 
 ```bash
-pnpm test:e2e                                    # all end-to-end tests
-pnpm test:e2e:report                             # open the HTML report
+pnpm test:e2e                                      # all end-to-end tests
+pnpm test:e2e:report                               # open the HTML report
 pnpm exec playwright test e2e/server-crud.spec.ts  # server use case only
 pnpm exec playwright test e2e/client-feed.spec.ts  # client use case only
 ```
@@ -89,6 +89,65 @@ Two suites cover the required cases:
 
 Tests run serially against a shared database, so the Playwright config sets
 `workers: 1`.
+
+### JMeter (load testing)
+
+The test plan lives at `load-tests/rss-load-test.jmx`. Load levels are supplied
+as JMeter properties, so one plan covers every stage:
+
+```bash
+docker compose up -d --build   # test the production build, not pnpm dev
+mkdir -p load-tests/results load-tests/reports
+
+jmeter -n -t load-tests/rss-load-test.jmx -Jusers=1 -Jrampup=1 \
+  -l load-tests/results/x1.jtl -e -o load-tests/reports/x1
+jmeter -n -t load-tests/rss-load-test.jmx -Jusers=10 -Jrampup=2 \
+  -l load-tests/results/x10.jtl -e -o load-tests/reports/x10
+jmeter -n -t load-tests/rss-load-test.jmx -Jusers=100 -Jrampup=10 \
+  -l load-tests/results/x100.jtl -e -o load-tests/reports/x100
+jmeter -n -t load-tests/rss-load-test.jmx -Jusers=1000 -Jrampup=30 \
+  -l load-tests/results/x1000.jtl -e -o load-tests/reports/x1000
+jmeter -n -t load-tests/rss-load-test.jmx -Jusers=100 -Jrampup=5 -Jloops=100 \
+  -l load-tests/results/x10000.jtl -e -o load-tests/reports/x10000
+```
+
+Results against `GET /api/items`:
+
+| Stage  | Configuration              | Samples | Throughput | Avg    | Errors |
+| ------ | -------------------------- | ------- | ---------- | ------ | ------ |
+| x1     | 1 user, 1s ramp            | 1       | 3.9/s      | 214 ms | 0      |
+| x10    | 10 users, 2s ramp          | 10      | 5.5/s      | 19 ms  | 0      |
+| x100   | 100 users, 10s ramp        | 100     | 10.1/s     | 13 ms  | 0      |
+| x1000  | 1000 users, 30s ramp       | 1,000   | 33.3/s     | 10 ms  | 0      |
+| x10000 | 100 concurrent × 100 loops | 10,000  | 1,560/s    | 19 ms  | 0      |
+
+The first four stages issue one request per thread, so throughput is bounded by
+the ramp-up schedule rather than by the application; they confirm correctness as
+the arrival rate increases. The final stage holds 100 threads concurrently for
+100 iterations each, which applies genuine concurrent load: the system sustained
+1,560 requests per second across 10,000 samples with no errors and a 58 ms
+maximum response time. Every one of those requests also wrote a row to the
+request log, so the figure includes a database write per request. The saturation
+point was not reached at this concurrency level.
+
+Running 10,000 simultaneous threads was not attempted, as thread and file
+descriptor limits on the test machine would have been measured rather than the
+application.
+
+Generated results and HTML reports are gitignored; regenerate them with the
+commands above.
+
+### Lighthouse (accessibility)
+
+Run against the Docker build with Chrome DevTools → Lighthouse → Accessibility.
+All routes (`/`, `/dashboard`, `/feeds`, `/client`, `/about`, `/settings`) score 100.
+
+Automated tooling covers only part of WCAG, so a manual review was also carried
+out. That review found the dashboard metric cards signalled warning and error
+states through border colour alone, which fails WCAG 1.4.1 (Use of Colour) and
+is not something Lighthouse can detect. Screen-reader-only state prefixes were
+added to `MetricCard`, matching the pattern already used in `AlertPanel`, so the
+state is announced as well as shown.
 
 ## API
 
@@ -189,6 +248,8 @@ lib/
   api/                     # Response envelope, logging, client identification
   feeds/                   # Repository interface and implementations
   metrics/                 # Metric types and alert derivation
+load-tests/
+  rss-load-test.jmx        # JMeter plan, parameterised by load level
 prisma/
   schema.prisma            # Database schema
   migrations/              # Applied migrations

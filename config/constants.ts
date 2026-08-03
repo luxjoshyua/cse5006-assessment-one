@@ -8,7 +8,8 @@ export const SITE_METADATA = {
   UNIVERSITY: "La Trobe University",
   YEAR: 2026,
   SITE_NAME: "RSS Server & LMS",
-  ASSESSMENT_TITLE: "CSE5006 — Assessment 1: RSS Server & LMS Frontend",
+  ASSESSMENT_TITLE:
+    "CSE5006 — Assessment 2: Backend implementation, API, and database",
   DESCRIPTION:
     "Frontend interface for an RSS Server feeding into a Learning Management System.",
 } as const

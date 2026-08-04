@@ -7,11 +7,11 @@ Provides a web interface for viewing and managing RSS feeds and items.
 
 ## Demo
 
-[Video walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
+[Video walkthrough](https://youtu.be/pQjeabk_tSo)
 
 ## Repository Link
 
-[GitHub](https://github.com/luxjoshyua/cse5006-assessment-one)
+[GitHub](https://github.com/luxjoshyua/cse5006-rss-server)
 
 ## Prerequisites
 

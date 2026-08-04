@@ -5,4 +5,11 @@ node_modules
 out
 .venv
 pnpm-lock.yaml
-next-env.d.ts
+next-env.d.tsplaywright-report
+test-results
+load-tests/reports
+load-tests/results
+playwright-report/**
+test-results/**
+load-tests/reports/**
+load-tests/results/**

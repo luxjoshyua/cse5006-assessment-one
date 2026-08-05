@@ -55,7 +55,7 @@ export default function AboutPage() {
         </div>
         <VideoEmbed
           videoId={VIDEO_ID}
-          title="Walkthrough of the RSS Server and LMS frontend"
+          title="Walkthrough of the RSS Server & LMS"
         />
       </section>
 

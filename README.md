@@ -111,31 +111,35 @@ jmeter -n -t load-tests/rss-load-test.jmx -Jusers=100 -Jrampup=5 -Jloops=100 \
   -l load-tests/results/x10000.jtl -e -o load-tests/reports/x10000
 ```
 
-Results against `GET /api/items`:
+Results against the RSS client workflow (`GET /api/items` followed by
+`GET /api/feeds`, so each virtual user issues two requests):
 
-| Stage  | Configuration              | Samples | Throughput | Avg    | Errors |
-| ------ | -------------------------- | ------- | ---------- | ------ | ------ |
-| x1     | 1 user, 1s ramp            | 1       | 3.9/s      | 214 ms | 0      |
-| x10    | 10 users, 2s ramp          | 10      | 5.5/s      | 19 ms  | 0      |
-| x100   | 100 users, 10s ramp        | 100     | 10.1/s     | 13 ms  | 0      |
-| x1000  | 1000 users, 30s ramp       | 1,000   | 33.3/s     | 10 ms  | 0      |
-| x10000 | 100 concurrent × 100 loops | 10,000  | 1,560/s    | 19 ms  | 0      |
+| Stage  | Configuration              | Samples | Throughput | Avg   | Max    | Errors |
+| ------ | -------------------------- | ------- | ---------- | ----- | ------ | ------ |
+| x1     | 1 user, 1s ramp            | 2       | 17.4/s     | 30 ms | 49 ms  | 0      |
+| x10    | 10 users, 2s ramp          | 20      | 10.8/s     | 13 ms | 44 ms  | 0      |
+| x100   | 100 users, 10s ramp        | 200     | 20.1/s     | 10 ms | 33 ms  | 0      |
+| x1000  | 1000 users, 30s ramp       | 2,000   | 66.7/s     | 5 ms  | 36 ms  | 0      |
+| x10000 | 100 concurrent × 100 loops | 20,000  | 1,461/s    | 46 ms | 118 ms | 0      |
 
-The first four stages issue one request per thread, so throughput is bounded by
-the ramp-up schedule rather than by the application; they confirm correctness as
-the arrival rate increases. The final stage holds 100 threads concurrently for
-100 iterations each, which applies genuine concurrent load: the system sustained
-1,560 requests per second across 10,000 samples with no errors and a 58 ms
-maximum response time. Every one of those requests also wrote a row to the
-request log, so the figure includes a database write per request. The saturation
-point was not reached at this concurrency level.
+The first four stages issue one pass per thread, so throughput is bounded by the
+ramp-up schedule rather than by the application; they confirm correctness as the
+arrival rate increases. The final stage holds 100 threads concurrently for 100
+iterations each, applying genuine concurrent load: the system sustained 1,461
+requests per second across 20,000 samples with no errors, a 46 ms mean and an
+82 ms 99th percentile. Every request also wrote a row to the request log, so
+these figures include a database write per request.
+
+The per-endpoint breakdown shows `GET /api/feeds` averaging 51 ms against 41 ms
+for `GET /api/items`, with 99th percentiles of 86 ms and 74 ms respectively. The
+feeds endpoint is the more expensive of the two because it returns each feed
+with its items nested, where the items endpoint returns a flat list. The
+difference is consistent but modest, and neither endpoint approached failure at
+this concurrency level, so the saturation point was not reached.
 
 Running 10,000 simultaneous threads was not attempted, as thread and file
 descriptor limits on the test machine would have been measured rather than the
 application.
-
-Generated results and HTML reports are gitignored; regenerate them with the
-commands above.
 
 ### Lighthouse (accessibility)
 

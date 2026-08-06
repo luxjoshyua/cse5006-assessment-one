@@ -13,4 +13,4 @@ export const SITE_METADATA = {
     "Frontend interface for an RSS Server feeding into a Learning Management System.",
 } as const
 
-export const VIDEO_ID = "6hqAdmKsyn4" as const
+export const VIDEO_ID = "NPWZSFZ5m-M" as const

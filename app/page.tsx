@@ -16,13 +16,15 @@ export default function Home() {
           About this project
         </h2>
         <Collapsible title="What is this application?" defaultOpen>
-          A frontend interface for an RSS Server that feeds syndicated content
-          into a Learning Management System. This stage is frontend-only; sample
-          posts stand in for live feed data.
+          An RSS Server that collects syndicated content and delivers it into a
+          Learning Management System. Feed data is stored in PostgreSQL, served
+          through a REST API, and published as an RSS 2.0 document for external
+          readers.
         </Collapsible>
         <Collapsible title="What can I do here?">
           Browse feed posts on the Feeds page, open any post for the full
-          article, and adjust the theme and feed density in Settings.
+          article, watch the RSS Client consume the server&apos;s API, and
+          review system health on the Dashboard.
         </Collapsible>
         <Collapsible title="What can I monitor?">
           The dashboard reports feed and item counts, request activity by feed

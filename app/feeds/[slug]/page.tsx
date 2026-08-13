@@ -4,13 +4,10 @@ import type { Metadata } from "next"
 import { feeds } from "@/lib/feeds"
 import { formatDateShort } from "@/lib/format"
 
+export const dynamic = "force-dynamic"
+
 interface Props {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const items = await feeds.listItems()
-  return items.map((item) => ({ slug: item.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

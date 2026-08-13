@@ -14,7 +14,7 @@ export default function MenuButton({ open, onClick, controls }: Props) {
       aria-label={open ? "Close menu" : "Open menu"}
       aria-expanded={open}
       aria-controls={controls}
-      className="relative z-[60] flex h-10 w-10 items-center justify-center rounded-md border border-border text-fg md:hidden"
+      className="relative z-[60] flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-border text-fg md:hidden"
     >
       <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
       <span className="relative block h-4 w-5" aria-hidden="true">

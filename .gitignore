@@ -43,3 +43,16 @@ next-env.d.ts
 
 notes.md
 output/
+!.env.example
+lib/generated/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+load-tests/results/
+load-tests/reports/
+jmeter.log

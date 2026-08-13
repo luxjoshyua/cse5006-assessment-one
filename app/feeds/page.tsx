@@ -1,6 +1,8 @@
 import FeedCard from "@/components/FeedCard"
 import { feeds } from "@/lib/feeds"
 
+export const dynamic = "force-dynamic"
+
 export const metadata = {
   title: "Feeds",
 }
@@ -13,8 +15,8 @@ export default async function FeedsPage() {
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold tracking-tight">Feeds</h1>
         <p className="max-w-2xl text-muted">
-          Syndicated posts collected for the LMS. Sample content stands in for
-          live RSS data at this stage.
+          Syndicated posts collected for the LMS, served from the database and
+          available as an RSS feed.
         </p>
       </header>
 

@@ -5,7 +5,7 @@ const GFG = "https://media.geeksforgeeks.org/wp-content/uploads"
 const SAMPLE_FEED: Feed = {
   id: "cse5006-blogs",
   title: "CSE5006 Blogs",
-  description: "Blog-style sample content used in place of live RSS feed data.",
+  description: "Syndicated posts published by the CSE5006 RSS Server.",
   siteUrl: "https://lms.latrobe.edu.au",
   items: [
     {

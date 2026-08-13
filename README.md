@@ -164,6 +164,11 @@ on success, `{ "data": null, "error": "message" }` on failure.
 | GET    | `/api/count`            | Request totals, unique clients, counts by method                                                          |
 | GET    | `/api/metrics`          | Feed and item counts, per-feed and per-client request breakdowns, response statuses, and alert conditions |
 | GET    | `/api/feeds`            | List all feeds with their items                                                                           |
+| GET    | `/api/rss`              | RSS 2.0 XML document for external feed readers                                                            |
+| POST   | `/api/feeds`            | Create a feed                                                                                             |
+| GET    | `/api/feeds/[id]`       | Retrieve a single feed                                                                                    |
+| PATCH  | `/api/feeds/[id]`       | Update a feed                                                                                             |
+| DELETE | `/api/feeds/[id]`       | Delete a feed and, by cascade, its items                                                                  |
 | GET    | `/api/feeds/[id]/items` | Items for a single feed; requests are attributed to that feed                                             |
 | GET    | `/api/items`            | List all feed items, newest first                                                                         |
 | POST   | `/api/items`            | Create a feed item                                                                                        |

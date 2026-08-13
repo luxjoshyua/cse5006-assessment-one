@@ -1,3 +1,10 @@
+interface FeedInput {
+  title: string
+  description: string
+  siteUrl: string
+  feedUrl: string
+}
+
 interface ItemInput {
   slug: string
   title: string
@@ -101,6 +108,65 @@ export function parseUpdateInput(
       return { ok: false, error: "Field publishedAt must be a valid ISO date" }
     }
     out.publishedAt = new Date(b.publishedAt)
+  }
+
+  if (Object.keys(out).length === 0) {
+    return { ok: false, error: "No updatable fields provided" }
+  }
+
+  return { ok: true, value: out }
+}
+
+export function parseFeedInput(body: unknown): ParseResult<FeedInput> {
+  if (typeof body !== "object" || body === null) {
+    return { ok: false, error: "Body must be an object" }
+  }
+
+  const b = body as Record<string, unknown>
+
+  for (const key of ["title", "description", "siteUrl", "feedUrl"]) {
+    if (typeof b[key] !== "string" || (b[key] as string).trim() === "") {
+      return { ok: false, error: `Missing or invalid field: ${key}` }
+    }
+  }
+
+  for (const key of ["siteUrl", "feedUrl"]) {
+    if (!isValidUrl(b[key] as string)) {
+      return { ok: false, error: `Field ${key} must be a valid http(s) URL` }
+    }
+  }
+
+  if ((b.title as string).length > MAX_TITLE) {
+    return { ok: false, error: `Field title exceeds ${MAX_TITLE} characters` }
+  }
+
+  return { ok: true, value: b as unknown as FeedInput }
+}
+
+export function parseFeedUpdateInput(
+  body: unknown,
+): ParseResult<Record<string, string>> {
+  if (typeof body !== "object" || body === null) {
+    return { ok: false, error: "Body must be an object" }
+  }
+
+  const b = body as Record<string, unknown>
+  const out: Record<string, string> = {}
+
+  for (const key of ["title", "description"]) {
+    if (b[key] === undefined) continue
+    if (typeof b[key] !== "string" || (b[key] as string).trim() === "") {
+      return { ok: false, error: `Invalid value for field: ${key}` }
+    }
+    out[key] = b[key] as string
+  }
+
+  for (const key of ["siteUrl", "feedUrl"]) {
+    if (b[key] === undefined) continue
+    if (typeof b[key] !== "string" || !isValidUrl(b[key] as string)) {
+      return { ok: false, error: `Field ${key} must be a valid http(s) URL` }
+    }
+    out[key] = b[key] as string
   }
 
   if (Object.keys(out).length === 0) {

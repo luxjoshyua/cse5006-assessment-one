@@ -7,7 +7,7 @@ that consumes it, and an operational dashboard. Runs entirely in Docker.
 
 ## Demo
 
-[Assessment 3 walkthrough](https://youtu.be/NPWZSFZ5m-M) · [Assessment 2 walkthrough](https://youtu.be/vgWd3fq_bkI) · [Assessment 1 walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
+[Assessment 3 walkthrough](https://youtu.be/OqA8BJ5uu-U) · [Assessment 2 walkthrough](https://youtu.be/vgWd3fq_bkI) · [Assessment 1 walkthrough](https://www.youtube.com/watch?v=6hqAdmKsyn4)
 
 ## Repository
 

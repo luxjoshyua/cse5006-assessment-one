@@ -27,17 +27,14 @@ export default function AboutPage() {
           and each opens to a full view.
         </p>
         <p className="text-sm text-muted">
-          This stage, Assessment 1, is frontend only. There is no server, no
-          database, and no live feed processing yet. The posts shown in Feeds
-          are fixed sample content, used so that layout, navigation, theming,
-          and accessibility can be settled before any backend exists.
+          The application is backed by a PostgreSQL database accessed through
+          Prisma, with a REST API providing CRUD operations over feeds and
+          items, operational endpoints for health and metrics, and an RSS
+          endpoint for external clients. The whole stack runs in Docker.
         </p>
         <p className="text-sm text-muted">
-          Assessment 2 adds the server side: a database to store feeds and their
-          items, an API for creating and retrieving them, and a client page that
-          consumes real RSS. The interface you are using now becomes the
-          presentation layer for that system, so the sample posts are replaced
-          by live feed data without the screens themselves changing.
+          Assessment 3 builds a data-driven web app that builds on the frontend
+          and backend work completed in Assessments 1 and 2.
         </p>
       </section>
 

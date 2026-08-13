@@ -84,4 +84,14 @@ test.describe("Server use case: CRUD operations on feed items", () => {
     const body = await res.json()
     expect(body.data.database).toBe("connected")
   })
+
+  test("publishes a valid RSS document", async ({ request }) => {
+    const res = await request.get("/api/rss")
+    expect(res.status()).toBe(200)
+    expect(res.headers()["content-type"]).toContain("application/rss+xml")
+    const body = await res.text()
+    expect(body).toContain('<rss version="2.0"')
+    expect(body).toContain("<channel>")
+    expect(body).toContain("<item>")
+  })
 })

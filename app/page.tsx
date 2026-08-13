@@ -24,9 +24,10 @@ export default function Home() {
           Browse feed posts on the Feeds page, open any post for the full
           article, and adjust the theme and feed density in Settings.
         </Collapsible>
-        <Collapsible title="What's coming next?">
-          Assessment 2 introduces the backend, a database, and live RSS feeds,
-          which will replace the sample content shown here.
+        <Collapsible title="What can I monitor?">
+          The dashboard reports feed and item counts, request activity by feed
+          and client, response statuses, and alerts for conditions that need
+          attention, all backed by request records stored in the database.
         </Collapsible>
       </section>
     </div>

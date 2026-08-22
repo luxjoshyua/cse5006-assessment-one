@@ -56,3 +56,4 @@ node_modules/
 load-tests/results/
 load-tests/reports/
 jmeter.log
+test-commands.txt
